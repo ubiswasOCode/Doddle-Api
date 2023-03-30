@@ -1,0 +1,8 @@
+FROM python:3.8.12
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+WORKDIR /code
+COPY requirements.txt /code/
+RUN apt-get update
+RUN pip3 install -r requirements.txt
+COPY . /code/

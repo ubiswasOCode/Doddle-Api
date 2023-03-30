@@ -2,12 +2,16 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from.models import *
 from.serializers import *
+from rest_framework.permissions import BasePermission, IsAuthenticated, SAFE_METHODS
+from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
+from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
 from django.contrib.auth.hashers import check_password
@@ -64,6 +68,7 @@ class RegisterApi(generics.GenericAPIView):
         })
 
 
+
 class LoginApi(generics.GenericAPIView):
     serializer_class = LoginSerializer
     def post(self, request):
@@ -91,13 +96,51 @@ class LoginApi(generics.GenericAPIView):
             return Response(content, status=status.HTTP_404_NOT_FOUND)
 
 
-# class SignupAPI(generics.GenericAPIView):
-#     serializer_class = SignupSerializer
-#     def post(self, request, *args, **kwargs):#,exception):
-#         serializer = self.get_serializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         user = serializer.save()
-#         return Response({
-#         "status":200,
-#         "msg":'Sign Up Successfully'
-#         })
+
+
+class ProjectCreateApi(generics.GenericAPIView):
+    serializer_class = ProjectSerializer
+    def post(self, request, *args,  **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        print(serializer,"-----dtaa")
+        serializer.is_valid(raise_exception=True)
+        project = serializer.save()
+        return Response({
+            "project": UserSerializer(project, context=self.get_serializer_context()).data,
+            "message": "Project Created Successfully.",
+        })
+
+
+
+# class ProjectViewSet(viewsets.ModelViewSet):
+#     """
+#     A viewset for viewing and editing user instances.
+#     """
+#     # serializer_class = ProjectSerializer
+#     queryset = Project.objects.all()
+
+
+#     def retrieve(self, request, pk=None):
+#         item = get_object_or_404(self.queryset, pk=pk)
+#         serializer = ProjectSerializer(item)
+#         return Response(serializer.data)
+
+
+##------For Project
+class ProjectiewSet(viewsets.ModelViewSet):
+    """
+    A simple ViewSet for viewing and editing accounts.
+    """
+    queryset =Project.objects.all()
+    serializer_class = ProjectSerializer
+    # permission_classes = [IsAuthenticated]
+
+
+##----------For Project_list
+class Projec_listviewSet(viewsets.ModelViewSet):
+    """
+    A simple ViewSet for viewing and editing accounts.
+    """
+    queryset =Project_list.objects.all()
+    serializer_class = Project_listSerializer
+    # permission_classes = [IsAuthenticated]
