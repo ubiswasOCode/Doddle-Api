@@ -31,15 +31,6 @@ class HelloView(APIView):
         return Response(content)
 
 
-# class CurrentUserView(APIView):
-#     def get(self, request):
-#         data=User.objects.all().values()
-#         serializer = UserShortDetail(data, many=True)
-#         return Response(serializer.data)
-
-
-
-
 class UserDetailAPI(APIView):
   authentication_classes = (TokenAuthentication,)
   permission_classes = (AllowAny,)
@@ -112,19 +103,6 @@ class ProjectCreateApi(generics.GenericAPIView):
 
 
 
-# class ProjectViewSet(viewsets.ModelViewSet):
-#     """
-#     A viewset for viewing and editing user instances.
-#     """
-#     # serializer_class = ProjectSerializer
-#     queryset = Project.objects.all()
-
-
-#     def retrieve(self, request, pk=None):
-#         item = get_object_or_404(self.queryset, pk=pk)
-#         serializer = ProjectSerializer(item)
-#         return Response(serializer.data)
-
 
 ##------For Project
 class ProjectiewSet(viewsets.ModelViewSet):
@@ -133,7 +111,8 @@ class ProjectiewSet(viewsets.ModelViewSet):
     """
     queryset =Project.objects.all()
     serializer_class = ProjectSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
+
 
 
 ##----------For Project_list
@@ -143,4 +122,23 @@ class Projec_listviewSet(viewsets.ModelViewSet):
     """
     queryset =Project_list.objects.all()
     serializer_class = Project_listSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
+
+
+##-------------Card
+class Card_listviewSet(viewsets.ModelViewSet):
+    """
+    A simple ViewSet for viewing and editing accounts.
+    """
+    queryset = Card.objects.all()
+    serializer_class = CardSerializer
+    permission_classes = [IsAuthenticated]
+
+
+class Check_listviewSet(viewsets.ModelViewSet):
+    """
+    A simple ViewSet for viewing and editing accounts.
+    """
+    queryset = Checklist.objects.all()
+    serializer_class = ChecklistSerializer
+    permission_classes = [IsAuthenticated]
