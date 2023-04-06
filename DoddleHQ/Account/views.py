@@ -14,6 +14,7 @@ from rest_framework import generics
 from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth.hashers import check_password
 # Create your views here.
 
@@ -46,6 +47,14 @@ class RegisterUserAPIView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
 
 
+class ALlUsers(viewsets.ModelViewSet):
+    # serializer_class = UserSerializer
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['email', ]
+
+
 
 class RegisterApi(generics.GenericAPIView):
     serializer_class = RegisterSerializer
@@ -68,6 +77,7 @@ class LoginApi(generics.GenericAPIView):
         data = serializer.data
         email = data['email']
         password = data['password']
+
         try:
             user = User.objects.get(email = email)
             validate = check_password(password, user.password)
@@ -78,6 +88,7 @@ class LoginApi(generics.GenericAPIView):
                 "user": UserSerializer(user, context=self.get_serializer_context()).data,
                 "access": access,
                 "refresh": token,
+
                 })
             else:
                 content = {"detail": "Password Do not Match"}
@@ -112,6 +123,9 @@ class ProjectiewSet(viewsets.ModelViewSet):
     queryset =Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['id', ]
+
 
 
 
@@ -123,6 +137,8 @@ class Projec_listviewSet(viewsets.ModelViewSet):
     queryset =Project_list.objects.all()
     serializer_class = Project_listSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['id', ]
 
 
 ##-------------Card
@@ -142,3 +158,6 @@ class Check_listviewSet(viewsets.ModelViewSet):
     queryset = Checklist.objects.all()
     serializer_class = ChecklistSerializer
     permission_classes = [IsAuthenticated]
+
+
+

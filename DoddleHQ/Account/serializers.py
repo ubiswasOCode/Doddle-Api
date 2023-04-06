@@ -4,9 +4,11 @@ from Account.models import User,Project,Project_list,Card,Checklist,List_Table
 
 
 class UserSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = User
         fields = "__all__"
+
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -31,7 +33,6 @@ class RegisterSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     email = serializers.CharField(max_length=200)
     password = serializers.CharField(max_length=200)
-
 
 
 class ProjectSerializer(serializers.ModelSerializer):
